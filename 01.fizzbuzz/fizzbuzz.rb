@@ -1,4 +1,4 @@
-for i in 1..20
+(1..15).each do |i|
   if i % 3 == 0 && i % 5 == 0
     puts "FizzBuzz"
   elsif i % 5 == 0
