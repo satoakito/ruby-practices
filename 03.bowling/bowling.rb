@@ -22,12 +22,10 @@ end
 total = 0
 frames.each.with_index(1) do |frame, i|
   total += frame.sum
-  if i == 10 && frame.sum == 10 # 10フレーム目でストライクかスペアの場合
-    next
-  elsif frame[0] == 10 && i <= 10 # 10フレーム未満でストライクの場合
+  if frame[0] == 10 && i < 10 # 10フレーム未満でストライクの場合
     total += frames[i].sum
     total += frames[i + 1][0] if frames[i].size == 1
-  elsif frame.sum == 10 && i <= 10 # 10フレーム未満でスペアの場合
+  elsif frame.sum == 10 && i < 10 # 10フレーム未満でスペアの場合
     total += frames[i][0]
   end
 end
