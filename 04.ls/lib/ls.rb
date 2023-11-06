@@ -8,7 +8,7 @@ def prepare_files
   opt.on('-a') { |v| option[:a] = v }
   opt.parse!(ARGV)
 
-  files = option[:a] == true ? load_files_a_option : load_files
+  files = load_files(option[:a])
   col_num = 1
   col_num = (files.length / ROW_NUM.to_f).ceil if files.length > ROW_NUM
   divided_files = files.sort_by { |s| [s.match(/[^.]+/).to_s.downcase, s] }.each_slice(col_num).to_a
@@ -16,22 +16,13 @@ def prepare_files
   { col_num:, divided_files:, col_width: calc_col_width(files) }
 end
 
-def load_files
-  if ARGV == []
-    files = Dir.glob('*')
-  else
-    files = Dir.glob('*', base: ARGV[0]) if FileTest.directory?(ARGV[0])
-    files = ARGV if FileTest.file?(ARGV[0])
-  end
-  files
-end
+def load_files(option_a)
+  return Dir.glob('*', option_a ? File::FNM_DOTMATCH : 0) if ARGV == []
 
-def load_files_a_option
-  if ARGV == []
-    files = Dir.glob('*', File::FNM_DOTMATCH)
-  else
-    files = Dir.glob('*', File::FNM_DOTMATCH, base: ARGV[0]) if FileTest.directory?(ARGV[0])
-    files = ARGV if FileTest.file?(ARGV[0])
+  if FileTest.directory?(ARGV[0])
+    files = Dir.glob('*', option_a ? File::FNM_DOTMATCH : 0, base: ARGV[0])
+  elsif FileTest.file?(ARGV[0])
+    files = ARGV
   end
   files
 end
