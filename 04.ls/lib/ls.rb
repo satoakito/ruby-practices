@@ -17,14 +17,11 @@ def prepare_files
 end
 
 def load_files(option_a)
-  return Dir.glob('*', option_a ? File::FNM_DOTMATCH : 0) if ARGV == []
-
-  if FileTest.directory?(ARGV[0])
-    files = Dir.glob('*', option_a ? File::FNM_DOTMATCH : 0, base: ARGV[0])
+  if ARGV == [] || FileTest.directory?(ARGV[0])
+    Dir.glob('*', option_a ? File::FNM_DOTMATCH : 0, base: ARGV[0] || nil)
   elsif FileTest.file?(ARGV[0])
-    files = ARGV
+    ARGV
   end
-  files
 end
 
 def calc_col_width(files)
