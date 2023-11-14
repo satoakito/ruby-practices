@@ -6,12 +6,16 @@ def prepare_files
   opt = OptionParser.new
   option = {}
   opt.on('-a') { |v| option[:a] = v }
+  opt.on('-r') { |v| option[:r] = v }
   opt.parse!(ARGV)
 
   files = load_files(option[:a])
   col_num = 1
   col_num = (files.length / ROW_NUM.to_f).ceil if files.length > ROW_NUM
-  divided_files = files.sort_by { |s| [s.match(/[^.]+/).to_s.downcase, s] }.each_slice(col_num).to_a
+
+  divided_files = files.sort_by { |s| [s.match(/[^.]+/).to_s.downcase, s] }
+  divided_files = divided_files.reverse if option[:r]
+  divided_files = divided_files.each_slice(col_num).to_a
 
   { col_num:, divided_files:, col_width: calc_col_width(files) }
 end
