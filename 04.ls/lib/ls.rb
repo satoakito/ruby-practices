@@ -3,6 +3,27 @@
 require 'optparse'
 require 'etc'
 
+ROW_NUM = 3
+FILE_TYPE_SYMBOL = {
+  'fifo' => ['p'],
+  'characterSpecial' => ['c'],
+  'directory' => ['d'],
+  'blockSpecial' => ['b'],
+  'file' => ['-'],
+  'link' => ['l'],
+  'socket' => ['s']
+}.freeze
+PERMISSION_SYMBOL = {
+  '7' => 'rwx',
+  '6' => 'rw-',
+  '5' => 'r-w',
+  '4' => 'r--',
+  '3' => '-wx',
+  '2' => '-w-',
+  '1' => '--x',
+  '0' => '---'
+}.freeze
+
 def load_files(option_a)
   if ARGV == [] || FileTest.directory?(ARGV[0])
     Dir.glob('*', option_a ? File::FNM_DOTMATCH : 0, base: ARGV[0] || nil)
@@ -113,28 +134,8 @@ opt.parse!(ARGV)
 sorted_files = sort_files(load_files(option[:a]), option[:r])
 
 if option[:l]
-  FILE_TYPE_SYMBOL = {
-    'fifo' => ['p'],
-    'characterSpecial' => ['c'],
-    'directory' => ['d'],
-    'blockSpecial' => ['b'],
-    'file' => ['-'],
-    'link' => ['l'],
-    'socket' => ['s']
-  }.freeze
-  PERMISSION_SYMBOL = {
-    '7' => 'rwx',
-    '6' => 'rw-',
-    '5' => 'r-w',
-    '4' => 'r--',
-    '3' => '-wx',
-    '2' => '-w-',
-    '1' => '--x',
-    '0' => '---'
-  }.freeze
   display_files_l_option(prepare_files_l_option(sorted_files))
 else
-  ROW_NUM = 3
   list = prepare_files(sorted_files)
   display_files(list[:col_num], list[:prepared_files], list[:col_width])
 end
