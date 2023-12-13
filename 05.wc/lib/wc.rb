@@ -34,12 +34,12 @@ def count_bytes(str)
 end
 
 def count_digits(int)
-  int.map { |n| n.to_s.length }.max
+  int.values.map { |n| n.to_s.length }.max
 end
 
 #  indentはオプションが1つだけ指定された場合に出力が左寄せになるよう調整
 def display_result(elements, option)
-  indent = option.one? ? 0 : count_digits(elements.slice(0, 3))
+  indent = option.one? ? 0 : count_digits(elements.slice(:lines, :words, :bytes))
   print "#{elements[:lines].to_s.rjust(indent)} " if option[:l]
   print "#{elements[:words].to_s.rjust(indent)} " if option[:w]
   print "#{elements[:bytes].to_s.rjust(indent)} " if option[:c]
