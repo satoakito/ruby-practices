@@ -46,11 +46,14 @@ def display_result(elements, option)
   puts elements[:name]
 end
 
-def display_result_stdin(file_elements, option)
-  indent = option.one? ? 0 : 7
-  print "#{file_elements[:lines].to_s.rjust(indent)} " if option[:l]
-  print "#{file_elements[:words].to_s.rjust(indent)} " if option[:w]
-  print "#{file_elements[:bytes].to_s.rjust(indent)} " if option[:c]
+def display_result_stdin(elements, option)
+  indent = count_digits(elements)
+  indent = 7 if indent < 7
+  indent = 0 if option.one?
+
+  print "#{elements[:lines].to_s.rjust(indent)} " if option[:l]
+  print "#{elements[:words].to_s.rjust(indent)} " if option[:w]
+  print "#{elements[:bytes].to_s.rjust(indent)} " if option[:c]
   puts
 end
 
