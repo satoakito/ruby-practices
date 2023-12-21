@@ -65,8 +65,8 @@ opt.on('-c') { |v| option[:c] = v }
 opt.parse!(ARGV)
 option = { l: true, w: true, c: true } if option.none?
 
-if ARGV.any?
-  exec_wc(option)
-else
+if ARGV.empty?
   exec_wc_stdin(option)
+else
+  exec_wc(option)
 end
